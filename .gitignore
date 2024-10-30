@@ -3,3 +3,4 @@
 **/trained_models
 **/predictions
 **/*.pth
+**/base
