@@ -23,7 +23,7 @@ class MyWandb:
         self.name = name
         self.loss_names = ['loss', 'Cls loss', 'Angle loss', 'IoU loss']
         self.epoch_loss_names = ['mean loss', 'mean Cls loss', 'mean Angle loss', 'mean IoU loss']
-
+        self.iter = 0
     def init(self,learning_rate, batch_size, max_epoch, image_size, input_size):
         wandb.init(project = self.project, name = self.name, config={
         "learning_rate": learning_rate,
@@ -36,8 +36,9 @@ class MyWandb:
     def finish():
         wandb.finish()
 
-    def save_iter(self,epoch,iter_losses):
-        wandb.log({"epoch": epoch + 1, **dict(zip(self.loss_names, iter_losses))})
+    def save_iter(self,iter_losses):
+        self.iter +=1
+        wandb.log({"iter": self.iter, **dict(zip(self.loss_names, iter_losses))})
 
     def save_epoch(self,epoch,lr,mean_losses):
         wandb.log({"epoch": epoch + 1, "learning rate": lr, **dict(zip(self.epoch_loss_names, mean_losses))})
@@ -151,11 +152,11 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
                 iter_losses = [loss_val, extra_info['cls_loss'], extra_info['angle_loss'], extra_info['iou_loss']]
                 for i in range(len(epoch_losses)):
                     epoch_losses[i] += iter_losses[i]
-                    
+
                 pbar.update(1)
                 val_dict = dict(zip(loss_names, iter_losses))
                 pbar.set_postfix(val_dict)
-                my_wandb.save_iter(epoch,iter_losses)   
+                my_wandb.save_iter(iter_losses)   
 
         scheduler.step()
         mean_losses = [loss / num_batches for loss in epoch_losses]
