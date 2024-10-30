@@ -1,0 +1,30 @@
+📦level2-cv-datacentric-cv-20
+ ┣ 📂.git
+ ┣ 📂.github
+ ┣ 📂base
+ ┃ ┣ 📂pths
+ ┃ ┃ ┗ 📜vgg16_bn-6c64b313.pth
+ ┃ ┣ 📜detect.py
+ ┃ ┣ 📜east_dataset.py
+ ┃ ┣ 📜loss.py
+ ┃ ┗ 📜model.py
+ ┣ 📂data
+ ┃ ┣ 📂chinese_receipt
+ ┃ ┣ 📂japanese_receipt
+ ┃ ┣ 📂thai_receipt
+ ┃ ┣ 📂vietnamese_receipt
+ ┃ ┗ 📜sample_submission.csv
+ ┣ 📂data_loader
+ ┃ ┣ 📜dataset.py
+ ┃ ┗ 📜transform.py
+ ┣ 📂eda
+ ┃ ┗ 📜eda.ipynb
+ ┣ 📂predictions
+ ┃ ┗ 📜output.csv
+ ┣ 📂trained_models
+ ┃ ┗ 📜latest.pth
+ ┣ 📜.gitignore
+ ┣ 📜deteval.py
+ ┣ 📜inference.py
+ ┣ 📜requirements.txt
+ ┗ 📜train.py
