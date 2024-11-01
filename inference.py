@@ -18,25 +18,6 @@ from base.model import EAST
 CHECKPOINT_EXTENSIONS = ['.pth', '.ckpt']
 LANGUAGE_LIST = ['chinese', 'japanese', 'thai', 'vietnamese']
 
-# def parse_args():
-#     parser = ArgumentParser()
-
-#     # Conventional args
-#     parser.add_argument('--data_dir', default=os.environ.get('SM_CHANNEL_EVAL', 'data'))
-#     parser.add_argument('--model_dir', default=os.environ.get('SM_CHANNEL_MODEL', 'trained_models'))
-#     parser.add_argument('--output_dir', default=os.environ.get('SM_OUTPUT_DATA_DIR', 'predictions'))
-
-#     parser.add_argument('--device', default='cuda' if cuda.is_available() else 'cpu')
-#     parser.add_argument('--input_size', type=int, default=2048)
-#     parser.add_argument('--batch_size', type=int, default=5)
-
-#     args = parser.parse_args()
-
-#     if args.input_size % 32 != 0:
-#         raise ValueError('`input_size` must be a multiple of 32')
-
-#     return args
-
 
 def load_config(config_path):
     with open(config_path, 'r') as file:
