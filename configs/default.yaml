@@ -1,0 +1,22 @@
+train: 
+  num_workers: 8
+  image_size: 2048
+  input_size: 1024
+  batch_size: 8
+  learning_rate: 0.001
+  max_epoch: 100   # 실험 epoch 기준 : 100
+  save_interval: 5
+  data_dir: data
+  model_dir: trained_models
+  device: cuda
+valid:
+  num_workers: 4
+  input_size: 2048
+  batch_size: 4
+inference: 
+  input_size: 2048
+  batch_size: 5
+  data_dir: data
+  model_dir: trained_models
+  device: cuda
+  output_dir: predictions 

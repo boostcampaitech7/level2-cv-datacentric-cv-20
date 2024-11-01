@@ -1,7 +1,8 @@
-import os
+import os, sys
 import os.path as osp
 import time
 import math
+import yaml
 from datetime import timedelta
 from argparse import ArgumentParser
 
@@ -17,31 +18,10 @@ from data_loader.dataset import SceneTextDataset
 from data_loader.transform import get_train_transform
 
 
-def parse_args():
-    parser = ArgumentParser()
-
-    # Conventional args
-    parser.add_argument('--data_dir', type=str,
-                        default=os.environ.get('SM_CHANNEL_TRAIN', 'data'))
-    parser.add_argument('--model_dir', type=str, default=os.environ.get('SM_MODEL_DIR',
-                                                                        'trained_models'))
-
-    parser.add_argument('--device', default='cuda' if cuda.is_available() else 'cpu')
-    parser.add_argument('--num_workers', type=int, default=8)
-
-    parser.add_argument('--image_size', type=int, default=2048)
-    parser.add_argument('--input_size', type=int, default=1024)
-    parser.add_argument('--batch_size', type=int, default=8)
-    parser.add_argument('--learning_rate', type=float, default=1e-3)
-    parser.add_argument('--max_epoch', type=int, default=150)
-    parser.add_argument('--save_interval', type=int, default=5)
-    
-    args = parser.parse_args()
-
-    if args.input_size % 32 != 0:
-        raise ValueError('`input_size` must be a multiple of 32')
-
-    return args
+def load_config(config_path):
+    with open(config_path, 'r') as file:
+        config = yaml.safe_load(file)
+    return config 
 
 
 def do_training(data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
@@ -104,8 +84,9 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
 
 
 def main(args):
-    do_training(**args.__dict__)
+    do_training(**args)
 
 if __name__ == '__main__':
-    args = parse_args()
+    config_path = sys.argv[1] if len(sys.argv) > 1 else "./configs/default.yaml"
+    args = load_config(config_path)['train']
     main(args)
