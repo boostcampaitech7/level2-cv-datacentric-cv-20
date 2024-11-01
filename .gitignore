@@ -4,3 +4,4 @@
 **/predictions
 **/*.pth
 **/base/*
+**/dataset
