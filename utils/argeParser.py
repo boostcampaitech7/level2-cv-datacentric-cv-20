@@ -37,7 +37,7 @@ def parse_args(type):
         parser.add_argument('--entity', type=str, default=argWandb['entity']) 
 
         parser.add_argument('--dataset', type=str, default=arge['dataset'])
-        parser.add_argument('--valid', type=bool, default=True)
+        parser.add_argument('--valid', type=str, default=arge['valid'])
         parser.add_argument('--resume', type=str, default=arge['resume'])
 
     elif type == 'inference':

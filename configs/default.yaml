@@ -9,8 +9,8 @@ train:
   data_dir: data
   model_dir: trained_models
   device: cuda 
-  dataset: Base
-  valid: True
+  dataset: Base # Base, CORD
+  valid: False # True, False
   resume: None
 valid:
   num_workers: 4
