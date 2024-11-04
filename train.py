@@ -15,7 +15,7 @@ from base.model import EAST
 from data_loader.dataset import SceneTextDataset
 from data_loader.transform import get_train_transform
 
-from util.custom import *
+from utils.custom import *
 
 def load_config(config_path):
     with open(config_path, 'r') as file:

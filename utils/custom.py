@@ -10,6 +10,7 @@ class MyWandb:
         self.loss_names = ['loss', 'Cls loss', 'Angle loss', 'IoU loss']
         self.epoch_loss_names = ['mean loss', 'mean Cls loss', 'mean Angle loss', 'mean IoU loss']
         self.iter = 0
+        
     def init(self,learning_rate, batch_size, max_epoch, image_size, input_size):
         wandb.init(project = self.project, name = self.name, config={
         "learning_rate": learning_rate,
