@@ -3,7 +3,6 @@ import os.path as osp
 import json
 import sys
 import yaml
-from argparse import ArgumentParser
 from glob import glob
 
 import torch
@@ -14,18 +13,10 @@ from tqdm import tqdm
 from base.detect import detect
 from base.model import EAST
 
+from utils.argeParser import parse_args
 
 CHECKPOINT_EXTENSIONS = ['.pth', '.ckpt']
 LANGUAGE_LIST = ['chinese', 'japanese', 'thai', 'vietnamese']
-
-
-
-def load_config(config_path):
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config 
-
-
 
 def do_inference(model, ckpt_fpath, data_dir, input_size, batch_size, split='test'):
     model.load_state_dict(torch.load(ckpt_fpath, map_location='cpu'))
@@ -77,6 +68,5 @@ def main(args):
 
 
 if __name__ == '__main__':
-    config_path = sys.argv[1] if len(sys.argv) > 1 else "./configs/default.yaml"
-    args = load_config(config_path)['inference']
+    args = parse_args('inference')
     main(args)
