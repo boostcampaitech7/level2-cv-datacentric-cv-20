@@ -4,4 +4,7 @@
 **/predictions
 **/*.pth
 **/base/*
+**/wandb
+**/output_train_*
 **/dataset
+

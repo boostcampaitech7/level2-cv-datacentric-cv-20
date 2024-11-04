@@ -19,10 +19,12 @@ CHECKPOINT_EXTENSIONS = ['.pth', '.ckpt']
 LANGUAGE_LIST = ['chinese', 'japanese', 'thai', 'vietnamese']
 
 
+
 def load_config(config_path):
     with open(config_path, 'r') as file:
         config = yaml.safe_load(file)
     return config 
+
 
 
 def do_inference(model, ckpt_fpath, data_dir, input_size, batch_size, split='test'):
