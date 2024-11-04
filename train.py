@@ -52,7 +52,7 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
     model.train()
     model_save_and_delete = ModelSaveAndDelete(model, model_dir,3)     
 
-    my_wandb = MyWandb('ocr baseline', 'baselineMaxEpoch200')
+    my_wandb = MyWandb('kaeh3403-personal', 'Data-Centric', 'cord_dataset')
     loss_names = my_wandb.loss_names
     my_wandb.init(learning_rate, batch_size, max_epoch, image_size, input_size)
 
