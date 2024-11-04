@@ -7,4 +7,5 @@
 **/wandb
 **/output_train_*
 **/dataset
-
+**/CORD_dataset
+**/Ori_CORD_dataset

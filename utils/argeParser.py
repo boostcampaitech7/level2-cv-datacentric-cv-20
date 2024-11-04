@@ -17,7 +17,7 @@ def parse_args(type):
     arge = load_config(config_args.configs)
     argWandb = arge['wandb']
     parser = ArgumentParser()
-    
+
     if type == 'train':
         arge = arge[type]       
         
@@ -34,6 +34,12 @@ def parse_args(type):
         # parser.add_argument('--save_interval', type=int, default=arge['save_interval'])
         parser.add_argument('--project_name', type=str, default=argWandb['project_name'])
         parser.add_argument('--model_name', type=str, default=argWandb['model_name']) 
+        parser.add_argument('--entity', type=str, default=argWandb['entity']) 
+
+        parser.add_argument('--dataset', type=str, default=arge['dataset'])
+        parser.add_argument('--valid', type=bool, default=True)
+        parser.add_argument('--resume', type=str, default=arge['resume'])
+
     elif type == 'inference':
         arge = arge[type]
         parser.add_argument('--data_dir', type=str, default=os.environ.get('SM_CHANNEL_TRAIN', arge['data_dir']))
