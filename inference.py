@@ -26,7 +26,7 @@ def parse_args():
 
     parser.add_argument('--device', default='cuda' if cuda.is_available() else 'cpu')
     parser.add_argument('--input_size', type=int, default=2048)
-    parser.add_argument('--batch_size', type=int, default=5)
+    parser.add_argument('--batch_size', type=int, default=8)
 
     args = parser.parse_args()
 
@@ -68,7 +68,7 @@ def main(args):
     model = EAST(pretrained=False).to(args.device)
 
     # Get paths to checkpoint files
-    ckpt_fpath = osp.join(args.model_dir, 'latest.pth')
+    ckpt_fpath = osp.join(args.model_dir, 'epoch_100_loss_1.1481.pth')
 
     if not osp.exists(args.output_dir):
         os.makedirs(args.output_dir)
@@ -77,10 +77,10 @@ def main(args):
 
     ufo_result = dict(images=dict())
     split_result = do_inference(model, ckpt_fpath, args.data_dir, args.input_size,
-                                args.batch_size, split='test')
+                                args.batch_size, split='train')
     ufo_result['images'].update(split_result['images'])
 
-    output_fname = 'output.csv'
+    output_fname = 'output_train_100.csv'
     with open(osp.join(args.output_dir, output_fname), 'w') as f:
         json.dump(ufo_result, f, indent=4)
 

@@ -5,3 +5,4 @@
 **/*.pth
 **/base/*
 **/wandb
+**/output_train_*
