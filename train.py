@@ -1,10 +1,7 @@
-import os, sys
-import os.path as osp
 import time
 import math
-import yaml
 from datetime import timedelta
-from argparse import ArgumentParser
+import sys
 
 import torch
 from torch import cuda
@@ -17,76 +14,76 @@ from base.model import EAST
 from data_loader.dataset import SceneTextDataset
 from data_loader.transform import get_train_transform
 
-
-def load_config(config_path):
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config 
+from utils.custom import *
+from utils.argeParser import parse_args
 
 
-def do_training(data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
-                learning_rate, max_epoch, save_interval):
-    dataset = SceneTextDataset(
-        data_dir,
-        split='train',
-        image_size=image_size,
-        crop_size=input_size,
-        transforms=get_train_transform()
-    )
-    dataset = EASTDataset(dataset)
-    num_batches = math.ceil(len(dataset) / batch_size)
-    train_loader = DataLoader(
-        dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=num_workers
-    )
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = EAST()
-    model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[max_epoch // 2], gamma=0.1)
 
-    model.train()
-    for epoch in range(max_epoch):
-        epoch_loss, epoch_start = 0, time.time()
-        with tqdm(total=num_batches) as pbar:
-            for img, gt_score_map, gt_geo_map, roi_mask in train_loader:
-                pbar.set_description('[Epoch {}]'.format(epoch + 1))
+def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
+                learning_rate, max_epoch, entity, project_name, model_name):
+    pass
+    # dataset = SceneTextDataset(
+    #     data_dir,
+    #     split='train',
+    #     image_size=image_size,
+    #     crop_size=input_size,
+    #     transforms=get_train_transform()
+    # )
+    # dataset = EASTDataset(dataset)
+    # num_batches = math.ceil(len(dataset) / batch_size)
+    # train_loader = DataLoader(
+    #     dataset,
+    #     batch_size=batch_size,
+    #     shuffle=True,
+    #     num_workers=num_workers,
+    #     pin_memory=True
+    # )
 
-                loss, extra_info = model.train_step(img, gt_score_map, gt_geo_map, roi_mask)
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+    # model = EAST()
+    # device = torch.device(device if torch.cuda.is_available() else "cpu")
+    # model.to(device)
+    # optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    # scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[75], gamma=0.1)
 
-                loss_val = loss.item()
-                epoch_loss += loss_val
+    # model.train()
+    # model_save_and_delete = ModelSaveAndDelete(model, model_dir,3)     
 
-                pbar.update(1)
-                val_dict = {
-                    'Cls loss': extra_info['cls_loss'], 'Angle loss': extra_info['angle_loss'],
-                    'IoU loss': extra_info['iou_loss']
-                }
-                pbar.set_postfix(val_dict)
+    # my_wandb = MyWandb(entity, project_name, model_name)
+    # loss_names = my_wandb.loss_names
+    # my_wandb.init(learning_rate, batch_size, max_epoch, image_size, input_size)
 
-        scheduler.step()
+    # for epoch in range(max_epoch):
+    #     epoch_losses = [0.,0.,0.,0.]
+    #     epoch_start = time.time()   
+    #     with tqdm(total=num_batches) as pbar:
+    #         for img, gt_score_map, gt_geo_map, roi_mask in train_loader:
 
-        print('Mean loss: {:.4f} | Elapsed time: {}'.format(
-            epoch_loss / num_batches, timedelta(seconds=time.time() - epoch_start)))
+    #             pbar.set_description('[Epoch {}]'.format(epoch + 1))
+    #             loss, extra_info = model.train_step(img, gt_score_map, gt_geo_map, roi_mask)
+    #             optimizer.zero_grad()
+    #             loss.backward()
+    #             optimizer.step()
+    #             loss_val = loss.item()
+    #             iter_losses = [loss_val, extra_info['cls_loss'], extra_info['angle_loss'], extra_info['iou_loss']]
+    #             for i in range(len(epoch_losses)):
+    #                 epoch_losses[i] += iter_losses[i]
 
-        if (epoch + 1) % save_interval == 0:
-            if not osp.exists(model_dir):
-                os.makedirs(model_dir)
+    #             pbar.update(1)
+    #             val_dict = dict(zip(loss_names, iter_losses))
+    #             pbar.set_postfix(val_dict)
+    #             my_wandb.save_iter(iter_losses)   
 
-            ckpt_fpath = osp.join(model_dir, 'latest.pth')
-            torch.save(model.state_dict(), ckpt_fpath)
-
+    #     scheduler.step()
+    #     mean_losses = [loss / num_batches for loss in epoch_losses]
+    #     print(f'Mean loss: {mean_losses[0]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
+    #     my_wandb.save_epoch(epoch,optimizer.param_groups[0]['lr'],mean_losses)
+    #     model_save_and_delete(mean_losses[0], epoch)     
+    # my_wandb.finish()
 
 def main(args):
-    do_training(**args)
+    do_training(**args.__dict__)
 
 if __name__ == '__main__':
-    config_path = sys.argv[1] if len(sys.argv) > 1 else "./configs/default.yaml"
-    args = load_config(config_path)['train']
+    args = parse_args('train')
     main(args)
