@@ -31,23 +31,15 @@ class MyWandb:
         if step is not None:
             self.iter = step 
         else:
-            self.iter += 1  
-        
-        if type == 'train':
-            train_losses = {f'train_{name}': loss for name, loss in zip(self.loss_names, iter_losses)}
-            wandb.log({"iter": self.iter, **train_losses}, commit=False)
-        else:
-            val_losses = {f'val_{name}': loss for name, loss in zip(self.loss_names, iter_losses)}
-            wandb.log({"iter": self.iter, **val_losses}, commit=True) 
+            self.iter += 1       
+       
+        wandb.log({"iter": self.iter, **dict(zip(self.prefix_loss_names(self.loss_names,type), iter_losses))})
 
     def save_epoch(self, type, epoch, lr, mean_losses):
-        if type == 'train':
-            train_losses = {f'train_{name}': loss for name, loss in zip(self.epoch_loss_names, mean_losses)}
-            wandb.log({"epoch": epoch + 1, "learning rate": lr, **train_losses}, commit=False)
-        else:
-            val_losses = {f'val_{name}': loss for name, loss in zip(self.epoch_loss_names, mean_losses)}
-            wandb.log({"epoch": epoch + 1, "learning rate": lr, **val_losses}, commit=True)  
-
+        wandb.log({"epoch": epoch + 1, "learning rate": lr, **dict(zip(self.prefix_loss_names(self.epoch_loss_names,type), mean_losses))})
+        
+    def prefix_loss_names(self, loss_names, mode):        
+        return [mode + "_" + name for name in loss_names]
 
 class ModelSaveAndDelete:
     def __init__(self, model, model_dir, num_save):

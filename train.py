@@ -85,7 +85,7 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
     model
     '''
     model = EAST()
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device(device if torch.cuda.is_available() else "cpu")
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[75], gamma=0.1)
