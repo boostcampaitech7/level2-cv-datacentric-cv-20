@@ -1,8 +1,7 @@
 import time
 import math
-import yaml
 from datetime import timedelta
-from argparse import ArgumentParser
+import sys
 
 import torch
 from torch import cuda
@@ -16,16 +15,13 @@ from data_loader.dataset import SceneTextDataset
 from data_loader.transform import get_train_transform
 
 from utils.custom import *
+from utils.argeParser import parse_args
 
-def load_config(config_path):
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config 
+
 
 
 def do_training(data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
-                learning_rate, max_epoch, save_interval):
-
+                learning_rate, max_epoch,project_name, model_name):
     dataset = SceneTextDataset(
         data_dir,
         split='train',
@@ -43,16 +39,16 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
         pin_memory=True
     )
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = EAST()
+    device = torch.device(device if torch.cuda.is_available() else "cpu")
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[max_epoch // 2], gamma=0.1)
+    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[75], gamma=0.1)
 
     model.train()
     model_save_and_delete = ModelSaveAndDelete(model, model_dir,3)     
 
-    my_wandb = MyWandb('ocr baseline', 'baselineMaxEpoch200')
+    my_wandb = MyWandb(project_name, model_name)
     loss_names = my_wandb.loss_names
     my_wandb.init(learning_rate, batch_size, max_epoch, image_size, input_size)
 
@@ -85,9 +81,8 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
     my_wandb.finish()
 
 def main(args):
-    do_training(**args)
+    do_training(**args.__dict__)
 
 if __name__ == '__main__':
-    config_path = sys.argv[1] if len(sys.argv) > 1 else "./configs/default.yaml"
-    args = load_config(config_path)['train']
+    args = parse_args('train')
     main(args)
