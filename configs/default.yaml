@@ -9,8 +9,8 @@ train:
   data_dir: data
   model_dir: trained_models
   device: cuda 
-  dataset: Base # Base, CORD
-  valid: False # True, False
+  dataset: CORD # Base, CORD
+  valid: True # True, False
   resume: None
 valid:
   num_workers: 4
@@ -21,8 +21,10 @@ inference:
   batch_size: 5
   data_dir: data
   model_dir: trained_models
+  pth_path: None # pth 확장자 제외
   device: cuda
   output_dir: predictions 
+  output_fname: output # csv 확장자 제외
 wandb:
   project_name: Data-Centric
   model_name: None

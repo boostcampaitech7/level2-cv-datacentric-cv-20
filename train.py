@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from base.east_dataset import EASTDataset
 from base.model import EAST
-from data_loader.dataset import SceneTextDataset, MergedDataset
+from data_loader.dataset import SceneTextDataset, CORDDataset, MergedDataset
 from data_loader.transform import get_train_transform, get_val_transform
 
 from utils.custom import *
@@ -43,7 +43,7 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
             )
 
     elif dataset == 'CORD':
-        train_dataset = MergedDataset(
+        train_dataset = CORDDataset(
         data_dir,
         split='train',
         image_size=image_size,
@@ -51,7 +51,7 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
         transforms=get_train_transform()
         )
         if valid:
-            val_dataset = MergedDataset(
+            val_dataset = CORDDataset(
             data_dir,
             split='val',
             image_size=image_size,
