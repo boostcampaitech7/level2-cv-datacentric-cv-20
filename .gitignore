@@ -5,3 +5,7 @@
 **/*.pth
 **/base/*
 **/dataset
+**/CORD_dataset
+**/Ori_CORD_dataset
+**/wandb
+**/output_train_*
