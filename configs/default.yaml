@@ -4,11 +4,14 @@ train:
   input_size: 1024
   batch_size: 8
   learning_rate: 0.001
-  max_epoch: 100   # 실험 epoch 기준 : 100
-  save_interval: 5
+  max_epoch: 50   # 실험 epoch 기준 : 100
+  # save_interval: 5
   data_dir: data
   model_dir: trained_models
-  device: cuda
+  device: cuda 
+  dataset: Base # Base, CORD
+  valid: False # True, False
+  resume: None
 valid:
   num_workers: 4
   input_size: 2048
@@ -20,3 +23,7 @@ inference:
   model_dir: trained_models
   device: cuda
   output_dir: predictions 
+wandb:
+  project_name: Data-Centric
+  model_name: None
+  entity : kaeh3403-personal
