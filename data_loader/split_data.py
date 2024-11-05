@@ -43,19 +43,19 @@ def split_data(path):
     train_json_path = json_path
     make_json(train_data, train_json_path)
 
-    valid_json_path = train_json_path.replace('train.json', 'valid.json')  
+    valid_json_path = train_json_path.replace('train.json', 'val.json')  
     make_json(valid_data, valid_json_path)
 
     folder_path = os.path.join(path, 'img')
     train_folder_path = os.path.join(folder_path, 'train')
-    valid_folder_path = os.path.join(folder_path, 'valid')
+    valid_folder_path = os.path.join(folder_path, 'val')
     Path(valid_folder_path).mkdir(exist_ok=True)
     
     for k in valid_keys:
         shutil.move(os.path.join(train_folder_path, k), os.path.join(valid_folder_path, k))
 
 def main():
-    path_lists = glob.glob(f"../data/*_receipt")
+    path_lists = glob.glob(f"./data/*_receipt")
     for path in path_lists:
         split_data(path)
 
