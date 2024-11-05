@@ -24,7 +24,7 @@ class MyWandb:
                 "input_size": input_size,
                 })
     
-    def finish():
+    def finish(self):
         wandb.finish()
 
     def save_iter(self, type, iter_losses, step=None):

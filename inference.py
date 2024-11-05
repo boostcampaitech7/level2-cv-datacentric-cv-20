@@ -45,28 +45,28 @@ def do_inference(model, ckpt_fpath, data_dir, input_size, batch_size, split='tes
     return ufo_result
 
 
-def main(args):
+def main(device, model_dir, output_dir, data_dir, input_size, batch_size):
     # Initialize model
-    model = EAST(pretrained=False).to(args['device'])
+    model = EAST(pretrained=False).to(device)
 
     # Get paths to checkpoint files
-    ckpt_fpath = osp.join(args['model_dir'], 'latest.pth')
+    ckpt_fpath = osp.join(model_dir, 'epoch_47_loss_1.3602.pth')
 
-    if not osp.exists(args['output_dir']):
-        os.makedirs(args['output_dir'])
+    if not osp.exists(output_dir):
+        os.makedirs(output_dir)
 
     print('Inference in progress')
 
     ufo_result = dict(images=dict())
-    split_result = do_inference(model, ckpt_fpath, args['data_dir'], args['input_size'],
-                                args['batch_size'], split='test')
+    split_result = do_inference(model, ckpt_fpath, data_dir,input_size,
+                                batch_size, split='test')
     ufo_result['images'].update(split_result['images'])
 
-    output_fname = 'output.csv'
-    with open(osp.join(args['output_dir'], output_fname), 'w') as f:
+    output_fname = 'baseline_8_50.csv'
+    with open(osp.join(output_dir, output_fname), 'w') as f:
         json.dump(ufo_result, f, indent=4)
 
 
 if __name__ == '__main__':
     args = parse_args('inference')
-    main(args)
+    main(**args.__dict__)
