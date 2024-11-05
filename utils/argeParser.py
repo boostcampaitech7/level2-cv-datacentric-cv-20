@@ -44,10 +44,12 @@ def parse_args(type):
         arge = arge[type]
         parser.add_argument('--data_dir', type=str, default=os.environ.get('SM_CHANNEL_TRAIN', arge['data_dir']))
         parser.add_argument('--model_dir', type=str, default=os.environ.get('SM_MODEL_DIR', arge['model_dir']))
+        parser.add_argument('--pth_path', type=str, default=arge['pth_path'])
         parser.add_argument('--device', default=arge['device'] if cuda.is_available() else 'cpu')
         parser.add_argument('--input_size', type=int, default=arge['input_size'])
         parser.add_argument('--batch_size', type=int, default=arge['batch_size'])
         parser.add_argument('--output_dir', type=str, default=os.environ.get('SM_OUTPUT_DATA_DIR', arge['output_dir']))
+        parser.add_argument('--output_fname', type=str, default=arge['output_fname'])
 
     elif type == 'valid':
         arge = arge[type]
