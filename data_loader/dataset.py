@@ -347,7 +347,7 @@ class SceneTextDataset(Dataset):
         self.split = split
         total_anno = dict(images=dict())
         for nation in self._lang_list:
-            with open(osp.join(root_dir, '{}_receipt/ufo/{}.json'.format(nation, split)), 'r', encoding='utf-8') as f:
+            with open(osp.join(root_dir, '{}_receipt/ufo/{}_relabel.json'.format(nation, split)), 'r', encoding='utf-8') as f:
                 anno = json.load(f)
             for im in anno['images']:
                 total_anno['images'][im] = anno['images'][im]
@@ -373,7 +373,7 @@ class SceneTextDataset(Dataset):
             lang = 'vietnamese'
         else:
             raise ValueError
-        return osp.join(self.root_dir, f'{lang}_receipt', 'img', self.split)
+        return osp.join(self.root_dir, f'{lang}_receipt', 'img', 'train')
     def __len__(self):
         return len(self.image_fnames)
 
