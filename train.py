@@ -178,17 +178,22 @@ def do_training(dataset, train_lang_list, valid, resume, data_dir, model_dir, de
                 mean_losses = [loss / val_num_batches for loss in val_epoch_losses]
                 print(f'Mean Validation loss: {mean_losses[0]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
 
-                # epoch_start = time.time()
-                # gt_bboxes = get_gt_bboxes(data_dir)
-                # pred_bboxes = get_pred_bboxes(model, data_dir, input_size, batch_size)
+                ''' epoch 당 valid accuracy 구할 때 '''
+                epoch_start = time.time()
+                gt_bboxes = get_gt_bboxes(data_dir)
+                pred_bboxes = get_pred_bboxes(model, data_dir, input_size, batch_size)
 
-                # result = calc_deteval_metrics(pred_bboxes, gt_bboxes)['total']
-                # precision, recall, f1_score = result['precision'], result['recall'], result['hmean']
-                # accuracies = [precision, recall, f1_score]
+                result = calc_deteval_metrics(pred_bboxes, gt_bboxes)['total']
+                precision, recall, f1_score = result['precision'], result['recall'], result['hmean']
+                total_accuracies = [precision, recall, f1_score]
 
-                # print(f'Precision: {accuracies[0]:.4f}, Recall: {accuracies[1]:.4f}, F1_score: {accuracies[2]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
-                # my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, accuracies)
+                print(f'Precision: {total_accuracies[0]:.4f}, Recall: {total_accuracies[1]:.4f}, F1_score: {total_accuracies[2]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
+                my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, total_accuracies=total_accuracies)
 
+
+                ''' lang별로 accuracy 구할 때 '''
+                
+                '''
                 epoch_start = time.time()
                 p_sum, r_sum, num_gt, num_det = 0.0, 0.0, 0, 0
                 for lang in ['chinese', 'japanese', 'thai', 'vietnamese']:
@@ -214,8 +219,9 @@ def do_training(dataset, train_lang_list, valid, resume, data_dir, model_dir, de
                 total_f1_score = 0 if total_precision+total_recall==0 else (2*total_precision*total_recall) / (total_precision+total_recall)
                 total_accuracies = [total_precision, total_recall, total_f1_score]
 
-            print(f'TOTAL_Precision: {total_accuracies[0]:.4f}, TOTAL_Recall: {total_accuracies[1]:.4f}, TOTAL_F1_score: {total_accuracies[2]:.4f}')
-            my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, total_accuracies=total_accuracies)
+                print(f'TOTAL_Precision: {total_accuracies[0]:.4f}, TOTAL_Recall: {total_accuracies[1]:.4f}, TOTAL_F1_score: {total_accuracies[2]:.4f}')
+                my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, total_accuracies=total_accuracies)
+                '''
 
         model_save_and_delete(total_accuracies[2], epoch) 
 
