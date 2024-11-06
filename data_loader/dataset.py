@@ -370,6 +370,7 @@ class SceneTextDataset(Dataset):
     def _infer_dir(self, fname):
         lang_indicator = fname.split('.')[1]
         name_indicator = fname.split('_')[0]
+        string_indicator = fname[0]
         if lang_indicator == 'zh':
             lang = 'chinese'
         elif lang_indicator == 'ja':
@@ -380,6 +381,8 @@ class SceneTextDataset(Dataset):
             lang = 'vietnamese'
         elif name_indicator == 'CORD':
             lang = 'cord'
+        elif string_indicator == 'X':
+            lang = 'SROIE2019'
         else:
             raise ValueError
         return osp.join(self.root_dir, f'{lang}_receipt', 'img', 'train')
