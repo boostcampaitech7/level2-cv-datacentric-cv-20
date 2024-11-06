@@ -85,6 +85,8 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
     model
     '''
     model = EAST()
+    ckpt_fpath = osp.join(model_dir, 'p1_0001_1024/epoch_62_loss_1.0018.pth')
+    model.load_state_dict(torch.load(ckpt_fpath, map_location='cpu'))
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)

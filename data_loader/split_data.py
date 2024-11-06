@@ -55,7 +55,7 @@ def split_data(path):
         shutil.move(os.path.join(train_folder_path, k), os.path.join(valid_folder_path, k))
 
 def main():
-    path_lists = glob.glob(f"./data/*_receipt")
+    path_lists = glob.glob(f"./data/bottom_iou_data/*_receipt")
     for path in path_lists:
         split_data(path)
 
