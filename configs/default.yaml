@@ -4,13 +4,13 @@ train:
   input_size: 1024
   batch_size: 8
   learning_rate: 0.001
-  max_epoch: 50   # 실험 epoch 기준 : 100
+  max_epoch: 100   # 실험 epoch 기준 : 100
   # save_interval: 5
-  data_dir: data
+  data_dir: data/bottom_iou_data
   model_dir: trained_models
   device: cuda 
-  dataset: CORD # Base, CORD
-  valid: True # True, False
+  dataset: Base # Base, CORD
+  valid: False # True, False
   resume: None
 valid:
   num_workers: 4
