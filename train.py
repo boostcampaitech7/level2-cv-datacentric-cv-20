@@ -182,7 +182,7 @@ def do_training(dataset, train_lang_list, valid, resume, data_dir, model_dir, de
                 epoch_start = time.time()
                 gt_bboxes = get_gt_bboxes(data_dir)
                 pred_bboxes = get_pred_bboxes(model, data_dir, input_size, batch_size)
-
+                
                 result = calc_deteval_metrics(pred_bboxes, gt_bboxes)['total']
                 precision, recall, f1_score = result['precision'], result['recall'], result['hmean']
                 total_accuracies = [precision, recall, f1_score]
