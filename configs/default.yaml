@@ -7,9 +7,10 @@ train:
   max_epoch: 50   # 실험 epoch 기준 : 100
   # save_interval: 5
   data_dir: data
-  model_dir: trained_models
+  model_dir: trained_models/base_val
   device: cuda 
-  dataset: CORD # Base, CORD
+  dataset: Base # Base, CORD
+  train_lang_list: ['chinese', 'japanese', 'thai', 'vietnamese'] # train으로 사용될 dataset 이름 추가
   valid: True # True, False
   resume: None
 valid:
@@ -20,12 +21,12 @@ inference:
   input_size: 2048
   batch_size: 5
   data_dir: data
-  model_dir: trained_models
+  model_dir: trained_models/base_val
   pth_path: None # pth 확장자 제외
   device: cuda
   output_dir: predictions 
   output_fname: output # csv 확장자 제외
 wandb:
   project_name: Data-Centric
-  model_name: None
+  model_name: base_relabel_val
   entity : kaeh3403-personal
