@@ -44,7 +44,7 @@ def get_gt_bboxes(data_dir, split='val'):
     gt_result = dict()
 
     for nation in lang_list:
-        with open(osp.join(data_dir, f'{nation}_receipt/ufo/{split}.json'), 'r', encoding='utf-8') as f:
+        with open(osp.join(data_dir, f'{nation}_receipt/ufo/{split}_relabel.json'), 'r', encoding='utf-8') as f:
             anno = json.load(f)
         for image in anno['images']:
             gt_result[image] = []
