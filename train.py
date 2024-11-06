@@ -14,10 +14,11 @@ from base.model import EAST
 from data_loader.dataset import SceneTextDataset, CORDDataset, MergedDataset
 from data_loader.transform import get_train_transform, get_val_transform
 
+from deteval import calc_deteval_metrics
+
 from utils.custom import *
 from utils.argeParser import parse_args
-
-
+from utils.accuracy_metric import get_gt_bboxes, get_pred_bboxes
 
 def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
                 learning_rate, max_epoch, entity, project_name, model_name):
@@ -175,8 +176,17 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
 
                 mean_losses = [loss / val_num_batches for loss in val_epoch_losses]
                 print(f'Mean Validation loss: {mean_losses[0]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
-            
-            my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses)
+
+                epoch_start = time.time()
+                gt_bboxes = get_gt_bboxes(data_dir)
+                pred_bboxes = get_pred_bboxes(model, data_dir, input_size, batch_size)
+
+                result = calc_deteval_metrics(pred_bboxes, gt_bboxes)['total']
+                precision, recall, f1_score = result['precision'], result['recall'], result['hmean']
+                accuracies = [precision, recall, f1_score]
+
+                print(f'Precision: {accuracies[0]:.4f}, Recall: {accuracies[1]:.4f}, F1_score: {accuracies[2]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
+                my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, accuracies)
 
         model_save_and_delete(mean_losses[0], epoch) 
 

@@ -10,6 +10,7 @@ class MyWandb:
         self.name = name
         self.loss_names = ['loss', 'Cls loss', 'Angle loss', 'IoU loss']
         self.epoch_loss_names = ['mean loss', 'mean Cls loss', 'mean Angle loss', 'mean IoU loss']
+        self.accuracy_names = ['Precision', 'Recall', 'F1_score']
         self.iter = 0
 
     def init(self,learning_rate, batch_size, max_epoch, image_size, input_size):
@@ -35,9 +36,12 @@ class MyWandb:
        
         wandb.log({"iter": self.iter, **dict(zip(self.prefix_loss_names(self.loss_names,type), iter_losses))})
 
-    def save_epoch(self, type, epoch, lr, mean_losses):
-        wandb.log({"epoch": epoch + 1, "learning rate": lr, **dict(zip(self.prefix_loss_names(self.epoch_loss_names,type), mean_losses))})
-        
+    def save_epoch(self, type, epoch, lr, mean_losses, accuracies=None):
+        log_dict = {"epoch": epoch + 1, "learning rate": lr, **dict(zip(self.prefix_loss_names(self.epoch_loss_names,type), mean_losses))}
+        if type == 'val':
+            log_dict.update(dict(zip(self.accuracy_names, accuracies)))
+        wandb.log(log_dict)
+
     def prefix_loss_names(self, loss_names, mode):        
         return [mode + "_" + name for name in loss_names]
 
