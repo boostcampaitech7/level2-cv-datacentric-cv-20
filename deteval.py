@@ -332,7 +332,10 @@ def calc_deteval_metrics(pred_bboxes_dict, gt_bboxes_dict,
 
     methodMetrics = {'precision': methodPrecision, 'recall': methodRecall,'hmean': methodHmean}
 
+    groupMetrics = {'precisionsum': methodPrecisionSum, 'recallsum': methodRecallSum, 'numGt': numGt, 'numDet': numDet}
+
     resDict = {'calculated': True, 'Message': '', 'total': methodMetrics,
-               'per_sample': perSampleMetrics, 'eval_hparams': eval_hparams}
+               'per_sample': perSampleMetrics, 'eval_hparams': eval_hparams,
+               'groupMetrics': groupMetrics}
 
     return resDict
