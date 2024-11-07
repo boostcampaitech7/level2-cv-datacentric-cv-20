@@ -3,14 +3,15 @@ train:
   image_size: 2048
   input_size: 1024
   batch_size: 8
-  learning_rate: 0.001
+  learning_rate: 0.0005
   max_epoch: 50   # 실험 epoch 기준 : 100
   # save_interval: 5
-  data_dir: data
+  data_dir: data/gray_data
   model_dir: trained_models
   device: cuda 
-  dataset: CORD # Base, CORD
+  dataset: Base # Base, CORD
   valid: True # True, False
+  train_lang_list: ['chinese', 'japanese', 'thai', 'vietnamese'] # train으로 사용될 dataset 이름 추가 # 
   resume: None
 valid:
   num_workers: 4

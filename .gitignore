@@ -9,3 +9,5 @@
 **/Ori_CORD_dataset
 **/wandb
 **/output_train_*
+**/*.json
+**/*.csv
