@@ -14,8 +14,10 @@ from base.model import EAST
 from data_loader.dataset import SceneTextDataset, CORDDataset, MergedDataset
 from data_loader.transform import get_train_transform, get_val_transform
 
+from deteval import calc_deteval_metrics
 from utils.custom import *
 from utils.argeParser import parse_args
+from utils.accuracy_metric import get_gt_bboxes, get_pred_bboxes, get_lang_pred_bboxes, get_lang_gt_bboxes
 
 
 
@@ -85,11 +87,11 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
     model
     '''
     model = EAST()
-    ckpt_fpath = osp.join(model_dir, 'p1_0001_1024/epoch_62_loss_1.0018.pth')
+    ckpt_fpath = osp.join(model_dir, 'p2/epoch_60_acc_0.7498.pth')
     model.load_state_dict(torch.load(ckpt_fpath, map_location='cpu'))
     device = torch.device(device if torch.cuda.is_available() else "cpu")
     model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=[75], gamma=0.1)
 
     model_save_and_delete = ModelSaveAndDelete(model, model_dir,3)     
@@ -177,10 +179,53 @@ def do_training(dataset, valid, resume, data_dir, model_dir, device, image_size,
 
                 mean_losses = [loss / val_num_batches for loss in val_epoch_losses]
                 print(f'Mean Validation loss: {mean_losses[0]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
-            
-            my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses)
 
-        model_save_and_delete(mean_losses[0], epoch) 
+                ''' epoch 당 valid accuracy 구할 때 '''
+                epoch_start = time.time()
+                gt_bboxes = get_gt_bboxes(data_dir)
+                pred_bboxes = get_pred_bboxes(model, data_dir, input_size, batch_size)
+                
+                result = calc_deteval_metrics(pred_bboxes, gt_bboxes)['total']
+                precision, recall, f1_score = result['precision'], result['recall'], result['hmean']
+                total_accuracies = [precision, recall, f1_score]
+
+                print(f'Precision: {total_accuracies[0]:.4f}, Recall: {total_accuracies[1]:.4f}, F1_score: {total_accuracies[2]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
+                my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, total_accuracies=total_accuracies)
+
+
+                ''' lang별로 accuracy 구할 때 '''
+                
+                '''
+                epoch_start = time.time()
+                p_sum, r_sum, num_gt, num_det = 0.0, 0.0, 0, 0
+                for lang in ['chinese', 'japanese', 'thai', 'vietnamese']:
+                    gt_bboxes = get_lang_gt_bboxes(data_dir, lang)
+                    pred_bboxes = get_lang_pred_bboxes(model, lang, data_dir, input_size, batch_size)
+                    result = calc_deteval_metrics(pred_bboxes, gt_bboxes)
+                    group_result = result['groupMetrics']
+                    total_result = result['total']
+
+                    p_sum += group_result['precisionsum']
+                    r_sum += group_result['recallsum']
+                    num_gt += group_result['numGt']
+                    num_det += group_result['numDet']
+
+                    precision, recall, f1_score = total_result['precision'], total_result['recall'], total_result['hmean']
+                    accuracies = [precision, recall, f1_score]
+
+                    print(f'{lang}_Precision: {accuracies[0]:.4f}, {lang}_Recall: {accuracies[1]:.4f}, {lang}_F1_score: {accuracies[2]:.4f} | Elapsed time: {timedelta(seconds=time.time() - epoch_start)}')
+                    my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, accuracies=accuracies, lang=lang)
+
+                total_precision = 0 if num_det==0 else p_sum / num_det
+                total_recall = 0 if num_gt==0 else r_sum / num_gt
+                total_f1_score = 0 if total_precision+total_recall==0 else (2*total_precision*total_recall) / (total_precision+total_recall)
+                total_accuracies = [total_precision, total_recall, total_f1_score]
+
+                print(f'TOTAL_Precision: {total_accuracies[0]:.4f}, TOTAL_Recall: {total_accuracies[1]:.4f}, TOTAL_F1_score: {total_accuracies[2]:.4f}')
+                my_wandb.save_epoch('val', epoch, optimizer.param_groups[0]['lr'], mean_losses, total_accuracies=total_accuracies)
+                '''
+
+        model_save_and_delete(total_accuracies[2], epoch) 
 
     my_wandb.finish()
 
