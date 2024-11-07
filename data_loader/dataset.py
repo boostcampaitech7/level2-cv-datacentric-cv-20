@@ -337,17 +337,23 @@ def filter_vertices(vertices, labels, ignore_under=0, drop_under=0):
 class SceneTextDataset(Dataset):
     def __init__(self, root_dir,
                  split='train',
+                 train_lang_list=None,
                  image_size=2048,
                  crop_size=1024,
                  ignore_under_threshold=10,
                  drop_under_threshold=1,
                  transforms=None):
-        self._lang_list = ['chinese', 'japanese', 'thai', 'vietnamese']
+        
+        if split == 'train': 
+            self._lang_list = train_lang_list
+        elif split == 'val':
+            self._lang_list = ['chinese', 'japanese', 'thai', 'vietnamese']
+
         self.root_dir = root_dir
         self.split = split
         total_anno = dict(images=dict())
         for nation in self._lang_list:
-            with open(osp.join(root_dir, '{}_receipt/ufo/{}.json'.format(nation, split)), 'r', encoding='utf-8') as f:
+            with open(osp.join(root_dir, '{}_receipt/ufo/{}_relabel.json'.format(nation, split)), 'r', encoding='utf-8') as f:
                 anno = json.load(f)
             for im in anno['images']:
                 total_anno['images'][im] = anno['images'][im]
@@ -363,6 +369,8 @@ class SceneTextDataset(Dataset):
 
     def _infer_dir(self, fname):
         lang_indicator = fname.split('.')[1]
+        name_indicator = fname.split('_')[0]
+        string_indicator = fname[0]
         if lang_indicator == 'zh':
             lang = 'chinese'
         elif lang_indicator == 'ja':
@@ -371,9 +379,14 @@ class SceneTextDataset(Dataset):
             lang = 'thai'
         elif lang_indicator == 'vi':
             lang = 'vietnamese'
+        elif name_indicator == 'CORD':
+            lang = 'cord'
+        elif string_indicator == 'X':
+            lang = 'SROIE2019'
         else:
             raise ValueError
-        return osp.join(self.root_dir, f'{lang}_receipt', 'img', self.split)
+        return osp.join(self.root_dir, f'{lang}_receipt', 'img', 'train')
+    
     def __len__(self):
         return len(self.image_fnames)
 

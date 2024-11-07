@@ -17,8 +17,8 @@ def make_json(data, path: str):
     with open(path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
-def split_data(path):
-    json_path = os.path.join(path, 'ufo', 'train.json')
+def split_data(path, lang):
+    json_path = os.path.join(path, 'ufo', f'{lang}_train_relable_ufo.json')
     json_data = read_json(json_path)
     image_keys = list(json_data['images'].keys())
 
@@ -40,24 +40,27 @@ def split_data(path):
         }
     }
 
-    train_json_path = json_path
+    train_json_path = os.path.join(path, 'ufo', 'train_relabel.json')
     make_json(train_data, train_json_path)
 
-    valid_json_path = train_json_path.replace('train.json', 'val.json')  
+    valid_json_path = os.path.join(path, 'ufo','val_relabel.json') 
     make_json(valid_data, valid_json_path)
 
-    folder_path = os.path.join(path, 'img')
-    train_folder_path = os.path.join(folder_path, 'train')
-    valid_folder_path = os.path.join(folder_path, 'val')
-    Path(valid_folder_path).mkdir(exist_ok=True)
+    # folder_path = os.path.join(path, 'img')
+    # train_folder_path = os.path.join(folder_path, 'train')
+    # valid_folder_path = os.path.join(folder_path, 'val')
+    # Path(valid_folder_path).mkdir(exist_ok=True)
     
-    for k in valid_keys:
-        shutil.move(os.path.join(train_folder_path, k), os.path.join(valid_folder_path, k))
+    # for k in valid_keys:
+    #     shutil.move(os.path.join(train_folder_path, k), os.path.join(valid_folder_path, k))
 
 def main():
-    path_lists = glob.glob(f"./data/bottom_iou_data/*_receipt")
-    for path in path_lists:
-        split_data(path)
+    # path_lists = glob.glob(f"./data/*_receipt")
+    lang_list = ['chinese', 'japanese', 'thai', 'vietnamese']
+    lang_name = ['chinese', 'japanese', 'thail', 'vietnamese']
+    path_lists = [f'./data/{lang}_receipt' for lang in lang_list]
+    for path, lang in zip(path_lists, lang_name):
+        split_data(path, lang)
 
 if __name__ == '__main__':
     main()
