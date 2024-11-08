@@ -24,6 +24,7 @@ def parse_args():
     parser.add_argument('--output_dir', type=str, default="bottom_iou_data")
     parser.add_argument('--gt_path', type=str, default=default_data_dir)
     parser.add_argument('--pred_path', type=str, default=script_dir+"/pred_output.json")
+    parser.add_argument('--iou_path', type=str, default=script_dir+"/iou_data.json")
     parser.add_argument('--is_compare_data', type=bool, default=False)
     parser.add_argument('--iou', type=int, default=30)
     parser.add_argument('--val', type=bool, default=False)
@@ -47,7 +48,6 @@ def get_images_info(gt_path, pred_path):
         data['images'].update(dict(images))
 
     print(f"Total number of GT_images: {len(data['images'])}")
-    print(gt_path)
     path_lists_100 = glob.glob(pred_path)
     data_train100 = {}
     data_train100['images'] = {}
@@ -235,7 +235,7 @@ def filter_and_remove_high_iou_boxes(language, data, bottom_iou, receipt_dir, bo
             json_path = bottom_iou_receipt_dir / 'ufo' / 'train.json'  
             update_json_with_filtered_boxes(json_path, boxes_to_keep_id_all,bottom_iou_receipt_dir,subset)
         
-def get_bottom_n_per_of_iou(gt_path, pred_path, is_compare_data,iou):
+def get_bottom_n_per_of_iou(gt_path, pred_path, is_compare_data,iou,iou_path):
     global iou_data
     gt_images, pred_images = get_images_info(gt_path, pred_path)
     t_key_list = get_keys(gt_images)
@@ -259,9 +259,9 @@ def get_bottom_n_per_of_iou(gt_path, pred_path, is_compare_data,iou):
                         box2 = pred_images['images'][li]['words'][mp2]['points']
                         angle_diff = angle_difference(Polygon(box1), Polygon(box2))
                     store_data(country,li,p1,box1,box2,max,angle_diff)
-        save_iou_data(iou_data_filename)          
+        save_iou_data(iou_path)          
     else:
-        iou_data = load_iou_data(iou_data_filename)
+        iou_data = load_iou_data(iou_path)
     
     top_iou = get_percentile_iou(100-iou)  
     print(f"Top  {100-iou}% IOU value: {top_iou}")
@@ -271,10 +271,10 @@ def get_bottom_n_per_of_iou(gt_path, pred_path, is_compare_data,iou):
 
     return bottom_iou
 
-def main(base_dir, output_dir, val, gt_path, pred_path, is_compare_data,iou):
+def main(base_dir, output_dir,iou_path, val, gt_path, pred_path, is_compare_data,iou):
     base_dir = Path(base_dir)
     bottom_iou_base_dir = base_dir / output_dir 
-    bottom_iou = get_bottom_n_per_of_iou(gt_path, pred_path, is_compare_data,iou)
+    bottom_iou = get_bottom_n_per_of_iou(gt_path, pred_path, is_compare_data,iou,iou_path)
     subsets =  ['train', 'test', 'val'] if val else ['train', 'test']
     for language in LANGUAGE_LIST:
         receipt_dir = base_dir / f"{language}_receipt"
