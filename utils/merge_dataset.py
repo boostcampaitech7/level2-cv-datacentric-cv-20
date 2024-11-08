@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+from argparse import ArgumentParser
 
 def merge_images_and_json_files(data_path, new_data_path):
     """
@@ -78,8 +79,15 @@ def merge_images_and_json_files(data_path, new_data_path):
             print("Train DATA and JSON merged successfully!")
     if len(os.listdir(output_test_path)) == 120 and len(merged_test_data['images'].keys()) == 120:
             print("Test DATA and JSON merged successfully!")
-    
 
-data_path = "./data"
-new_data_path = "./dataset"
-merge_images_and_json_files(data_path, new_data_path)
+def main():
+    parser = ArgumentParser(description="Merge images and JSON files into unified train/test folders")
+    parser.add_argument('--data_path', type=str, required=True, help="Path to the original data folder")
+    parser.add_argument('--new_data_path', type=str, required=True, help="Path to the unified data folder")
+    args = parser.parse_args()
+
+    merge_images_and_json_files(args.data_path, args.new_data_path)
+    print(f"Data merge complete. Merged data saved to {args.new_data_path}")
+
+if __name__ == "__main__":
+    main()
