@@ -29,7 +29,7 @@ def get_pred_bboxes(model, data_dir, input_size, batch_size, split='val'):
             val_data = json.load(f)
 
         val_image_fnames = val_data['images'].keys()
-        image_paths = [osp.join(data_dir, f'{lang}_receipt/img/train', fname) for fname in val_image_fnames]
+        image_paths = [osp.join(data_dir, f'{lang}_receipt/img/{split}', fname) for fname in val_image_fnames]
 
         image_fnames, by_sample_bboxes = [], []
         images = []
@@ -89,7 +89,7 @@ def get_lang_pred_bboxes(model, lang, data_dir, input_size, batch_size, split='v
 
     val_image_fnames = val_data['images'].keys()
     
-    image_paths = [osp.join(data_dir, f'{lang}_receipt/img/train', fname) for fname in val_image_fnames]
+    image_paths = [osp.join(data_dir, f'{lang}_receipt/img/{split}', fname) for fname in val_image_fnames]
     
     image_fnames, by_sample_bboxes = [], []
     images = []

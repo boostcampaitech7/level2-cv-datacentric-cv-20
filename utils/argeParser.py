@@ -64,6 +64,6 @@ def parse_args(type):
     args = parser.parse_args()
     if args.input_size % 32 != 0:
         raise ValueError('`input_size` must be a multiple of 32')
-    print(arge)
+    print(args)
     return args
 
