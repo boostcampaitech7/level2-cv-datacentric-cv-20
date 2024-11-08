@@ -125,7 +125,7 @@ def main():
     
     if option == "이미지 데이터" : 
         # 트레인 데이터 출력
-        choose_data = st.sidebar.selectbox("Train, Valid, Test", ("train", "valid", "test"))
+        choose_data = st.sidebar.selectbox("Train, Valid, Test, Cord", ("train", "valid", "test", "cord"))
     
         if choose_data == 'train':
             st.header("Train 데이터")
@@ -134,6 +134,15 @@ def main():
             json_path = '../dataset/train.json'
 
             show_image_to_streamlit(image_folder_path, json_path)
+            
+        elif choose_data == 'cord':
+            st.header("Cord 데이터")
+
+            image_folder_path = '../CORD_dataset/train'
+            json_path = '../CORD_dataset/train.json'
+
+            show_image_to_streamlit(image_folder_path, json_path)
+
 
         elif choose_data == 'valid':
             st.header("Valid 데이터")
