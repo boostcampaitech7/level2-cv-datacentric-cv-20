@@ -10,7 +10,9 @@ from base.detect import detect
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def load_image(image_fpath):
-    """Load an image and convert from BGR to RGB."""
+    '''
+    image BGR에서 RGB로 변환
+    '''
     return cv2.imread(image_fpath)[:, :, ::-1]
 
 def get_pred_bboxes(model, data_dir, input_size, batch_size, split='val'):
@@ -32,17 +34,6 @@ def get_pred_bboxes(model, data_dir, input_size, batch_size, split='val'):
         image_fnames, by_sample_bboxes = [], []
         images = []
 
-        # for image_fpath in tqdm(image_paths, desc=f'Processing {lang} images'):
-        #     image_fnames.append(osp.basename(image_fpath))
-
-        #     images.append(cv2.imread(image_fpath)[:, :, ::-1])
-        #     if len(images) == batch_size:
-        #         by_sample_bboxes.extend(detect(model, images, input_size))
-        #         images = []
-
-        # if len(images):
-        #     by_sample_bboxes.extend(detect(model, images, input_size))
-
         with ThreadPoolExecutor() as executor:
             future_to_path = {executor.submit(load_image, path): path for path in image_paths}
             
@@ -53,7 +44,6 @@ def get_pred_bboxes(model, data_dir, input_size, batch_size, split='val'):
                     image_fnames.append(osp.basename(image_fpath))
                     images.append(image)
                     
-                    # Process batch when full
                     if len(images) == batch_size:
                         by_sample_bboxes.extend(detect(model, images, input_size))
                         images = []
@@ -61,14 +51,11 @@ def get_pred_bboxes(model, data_dir, input_size, batch_size, split='val'):
                 except Exception as exc:
                     print(f'Error loading {image_fpath}: {exc}')
 
-        # Process remaining images
         if len(images) > 0:
             by_sample_bboxes.extend(detect(model, images, input_size))
 
-## 
         for image_fname, bboxes in zip(image_fnames, by_sample_bboxes):
             pred_result[image_fname] = bboxes
-    print('pred',len(pred_result))
     return pred_result
 
 def get_gt_bboxes(data_dir, split='val'):
@@ -77,7 +64,6 @@ def get_gt_bboxes(data_dir, split='val'):
     ex) 'image1' : [[좌표1, 좌표2, 좌표3, 좌표4], [], ..]
     '''
     lang_list = ['chinese', 'japanese', 'thai', 'vietnamese']
-
     gt_result = dict()
 
     for nation in lang_list:
@@ -88,7 +74,6 @@ def get_gt_bboxes(data_dir, split='val'):
             for id in anno['images'][image]['words']:
                 points = anno['images'][image]['words'][id]['points']
                 gt_result[image].append(points)
-
     return gt_result
 
 def get_lang_pred_bboxes(model, lang, data_dir, input_size, batch_size, split='val'):

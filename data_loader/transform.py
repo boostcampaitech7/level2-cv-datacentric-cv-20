@@ -18,7 +18,7 @@ def get_val_transform():
 
 class Sharpen(ImageOnlyTransform):
     def __init__(self, always_apply=False, p=0.5):
-        super(Sharpen, self).__init__(always_apply=always_apply, p=p)  # 인자 이름을 명시적으로 지정
+        super(Sharpen, self).__init__(always_apply=always_apply, p=p)
         self.kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
     
     def apply(self, image, **params):

@@ -1,4 +1,7 @@
-def convert_from_ufo_to_coco_format(data):
+import json
+from argparse import ArgumentParser
+
+def convert_from_ufo_to_coco_format(input_ufo_path, output_coco_path):
     '''
     input : UFO 형식 json file
     output : COCO 형식 json file
@@ -11,6 +14,9 @@ def convert_from_ufo_to_coco_format(data):
         'annotations': [],
         'categories': [{'id': 0, 'name': 'text'}]
     }
+
+    with open(input_ufo_path, 'r') as f:
+        data = json.load(f)
 
     for file_name, file_info in data['images'].items():
         image_id = image_id_start
@@ -46,4 +52,17 @@ def convert_from_ufo_to_coco_format(data):
             annotation_id_start += 1
         image_id_start += 1
     
-    return coco_data
+    with open(output_coco_path, 'w') as f:
+        json.dump(coco_data, f, indent=4)
+
+def main():
+    parser = ArgumentParser(description="Convert UFO JSON to COCO format JSON")
+    parser.add_argument('--input_path', type=str, required=True, help="Path to the input UFO format JSON file")
+    parser.add_argument('--output_path', type=str, required=True, help="Path to the output COCO format JSON file")
+    args = parser.parse_args()
+
+    convert_from_ufo_to_coco_format(args.input_path, args.output_path)
+    print(f"Conversion complete. COCO format JSON saved to {args.output_path}")
+
+if __name__ == "__main__":
+    main()
