@@ -14,3 +14,8 @@ python download_CORD_dataset.py
 ```bash
 python merge_dataset.py --data_path path/to/data --new_data_path path/to/dataset
 ```
+
+4. `split_data.py` : `./data/`  경로에 있는 기존 데이터셋을 훈련, 검증 데이터셋으로 나눈 json 파일 생성
+```bash
+python split_data.py
+```
