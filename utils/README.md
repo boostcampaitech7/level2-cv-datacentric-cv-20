@@ -20,7 +20,7 @@ python merge_dataset.py --data_path path/to/data --new_data_path path/to/dataset
 python split_data.py
 ```
 
-5. `convert_image_crop.py` : `./data/`  
+5. `convert_image_crop.py` : 각 이미지의 모든 박스를 포함하는 crop
 ```bash
 python convert_image_crop.py
 # parser.add_argument('--base_dir', type=str, default=default_data_dir)
@@ -29,7 +29,7 @@ python convert_image_crop.py
 # parser.add_argument('--val', type=bool, default=False)
 ```
 
-6. `convert_image_to_gray.py` : `./data/`  경로에 있는 기존 데이터셋을 훈련, 검증 데이터셋으로 나눈 json 파일 생성
+6. `convert_image_to_gray.py` : 모든 이미지를 gray scale로 변경
 ```bash
 python convert_image_to_gray.py
 # parser.add_argument('--base_dir', type=str, default=default_data_dir)
@@ -37,7 +37,7 @@ python convert_image_to_gray.py
 # parser.add_argument('--val', type=bool, default=False)
 ```
 
-7. `convert_image_to_preprocessing.py` : `./data/`  경로에 있는 기존 데이터셋을 훈련, 검증 데이터셋으로 나눈 json 파일 생성
+7. `convert_image_to_preprocessing.py` : 지정된 preprocessing 진행
 ```bash
 python convert_image_to_preprocessing.py
 # parser.add_argument('--base_dir', type=str, default=default_data_dir)
@@ -45,7 +45,7 @@ python convert_image_to_preprocessing.py
 # parser.add_argument('--val', type=bool, default=False)
 ```
 
-8. `make_bottom_n%_dataset.py` : `./data/`  경로에 있는 기존 데이터셋을 훈련, 검증 데이터셋으로 나눈 json 파일 생성
+8. `make_bottom_n%_dataset.py` : 한번 학습이 진행된 모델로 inference한 값을 utils에 두어 전에 iou에서 지정한 분위 이상의 box를 masking
 ```bash
 python make_bottom_n%_dataset.py
 # parser.add_argument('--base_dir', type=str, default=default_data_dir)
