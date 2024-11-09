@@ -71,3 +71,14 @@ python ufo_to_coco_cvat.py
 11. `SROIE2019_data_to_ufo.py` : kaggle에서 다운로드한 SROIE2019 dataset을 data에 저장하여 압축 해제하고 실행 하면 다른데이터에 맞게 변경
 ```bash
 python SROIE2019_data_to_ufo.py
+```
+
+12. `remove_special_characters.py` : 데이터 내 특수문자 제거 실험  
+```bash
+python remove_special_characters.py
+```
+
+13. `visualize_inference.py` : inference 수행 결과 시각화   
+```bash
+python visualize_inference.py
+```
