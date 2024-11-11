@@ -61,8 +61,8 @@ wrap up 레포트 : [wrap up report](etc/cv_20_OCR_Wrap-Up_Report.pdf)
 
 <br>
 <div style="text-align: center;">
-  <img src="etc/eda_images/1-1.png" alt="이미지 1-1" width="47%">
-  <img src="etc/eda_images/1-2.png" alt="이미지 1-2" width="22%">
+  <img src="etc/eda_images/1-1.png" alt="이미지 1-1" width="64%">
+  <img src="etc/eda_images/1-2.png" alt="이미지 1-2" width="30%">
 </div>
 <br>
 
@@ -71,7 +71,7 @@ wrap up 레포트 : [wrap up report](etc/cv_20_OCR_Wrap-Up_Report.pdf)
 
 <br>
 <div style="text-align: center;">
-  <img src="etc/eda_images/2.png" alt="이미지 2" width="70%">
+  <img src="etc/eda_images/2.png" alt="이미지 2" width="100%">
 </div>
 <br>
 
@@ -80,7 +80,7 @@ wrap up 레포트 : [wrap up report](etc/cv_20_OCR_Wrap-Up_Report.pdf)
 
 <br>
 <div style="text-align: center;">
-  <img src="etc/eda_images/3.png" alt="이미지 3" width="45%">
+  <img src="etc/eda_images/3.png" alt="이미지 3" width="70%">
 </div>
 <br>
 
@@ -90,10 +90,10 @@ wrap up 레포트 : [wrap up report](etc/cv_20_OCR_Wrap-Up_Report.pdf)
 
 <br>
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-  <img src="etc/eda_images/4-1.png" alt="이미지 4-1" style="width: 100%;">
-  <img src="etc/eda_images/4-2.png" alt="이미지 4-2" style="width: 100%;">
-  <img src="etc/eda_images/4-3.png" alt="이미지 4-3" style="width: 100%;">
-  <img src="etc/eda_images/4-4.png" alt="이미지 4-4" style="width: 100%;">
+  <img src="etc/eda_images/4-1.png" alt="이미지 4-1" style="width: 50%;">
+  <img src="etc/eda_images/4-2.png" alt="이미지 4-2" style="width: 50%;">
+  <img src="etc/eda_images/4-3.png" alt="이미지 4-3" style="width: 50%;">
+  <img src="etc/eda_images/4-4.png" alt="이미지 4-4" style="width: 50%;">
 </div>
 <br>
 
@@ -103,10 +103,10 @@ wrap up 레포트 : [wrap up report](etc/cv_20_OCR_Wrap-Up_Report.pdf)
 
 <br>
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-  <img src="etc/eda_images/5-1.png" alt="이미지 5-1" style="width: 100%;">
-  <img src="etc/eda_images/5-2.png" alt="이미지 5-2" style="width: 100%;">
-  <img src="etc/eda_images/5-3.png" alt="이미지 5-3" style="width: 100%;">
-  <img src="etc/eda_images/5-4.png" alt="이미지 5-4" style="width: 100%;">
+  <img src="etc/eda_images/5-1.png" alt="이미지 5-1" style="width: 50%;">
+  <img src="etc/eda_images/5-2.png" alt="이미지 5-2" style="width: 50%;">
+  <img src="etc/eda_images/5-3.png" alt="이미지 5-3" style="width: 50%;">
+  <img src="etc/eda_images/5-4.png" alt="이미지 5-4" style="width: 50%;">
 </div>
 <br>
 
