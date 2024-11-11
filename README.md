@@ -10,8 +10,8 @@
 <br>
 
 ## 2. 🧑‍🤝‍🧑 Team ( CV-20 : CV Up!!)
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <table style="margin: auto; border-collapse: collapse;">
+<div style="display: flex; justify-content: center; align-items: center;">
+  <table style="margin: auto;">
         <tr height="160px">
             <td align="center" width="150px">
                 <a href="https://github.com/kaeh3403"><img height="110px"  src="https://avatars.githubusercontent.com/kaeh3403"></a>
@@ -124,8 +124,8 @@ wrap up 레포트 : [wrap up report](etc/cv_20_OCR_Wrap-Up_Report.pdf)
     EDA 결과를 바탕으로 영수증 안의 구분선을 어지럽게 예측하는 문제점을 해결하기위해 transcription의 50%이상이 특수문자이거나 비어있으면(구분선) 그 객체를 제외하고 학습하였습니다. 
     실험 결과를 시각화했을때 바운딩박스가 더 잘 예측된 것 같았지만, precision이 오르고 recall이 떨어져 성능이 근소하게 낮아졌습니다. 하여 구분선을 포함하여 학습하기로 하였습니다.
   
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-  <table style="margin: auto; border-collapse: collapse;">
+<div style="display: flex; justify-content: center; align-items: center;">
+  <table style="margin: auto;">
     <thead>
       <tr>
         <th>Data</th>
